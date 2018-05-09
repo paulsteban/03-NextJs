@@ -1,7 +1,12 @@
-import {Controller, Get, HttpCode, Param, Post} from "@nestjs/common";
+import {Controller, Get, HttpCode, Param, Post, Req, Res} from "@nestjs/common";
+import {UsuarioService} from "../usuario.service";
 
 @Controller('Pelicula')
 export class AppPeliculaController {
+    constructor(private _usuarioService:UsuarioService) {
+
+    }
+
     peliculas: Pelicula[] = [];
 
     @Get('mostrarCartelera')
@@ -20,6 +25,20 @@ export class AppPeliculaController {
             );
 
         return this.peliculas;
+    }
+
+    @Post('mostrarCartelera')
+    @HttpCode(201)
+    anadirACarteleraConQueryParameters(
+        @Req() req,
+        @Res() res) {
+        const paramtrosQuery = req.query;
+        this.peliculas
+            .push(new Pelicula(
+                paramtrosQuery.nombre,
+                paramtrosQuery.estreno)
+            );
+        return res.send(this.peliculas);
     }
 }
 
