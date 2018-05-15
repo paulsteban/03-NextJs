@@ -4,11 +4,22 @@ import {AppPeliculaController} from "./html/app.pelicula-controller";
 import {ParametrosController} from "./html/parametros.controller";
 import {UsuarioService} from "./usuario.service";
 import {LogMiddleware} from "./log.middleware";
-
+import {UsuarioController} from "./usuario.controller";
+import {UsuarioEntity} from "./usuario/usuario.entity";
+import { TypeOrmModule } from '@nestjs/typeorm';
+import {UsuarioModule} from "./usuario/usuario.module";
 @Module({//Decoradores
-    imports: [],//importar otros modulos
+    imports: [TypeOrmModule.forRoot({
+        type: 'mysql',
+        host: 'localhost',
+        port: 3306,
+        username: 'root',
+        password: 'root',
+        database: 'web',
+        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        synchronize: true, }),UsuarioModule],//importar otros modulos
 
-    controllers: [AppController,AppPeliculaController,ParametrosController],
+    controllers: [AppController,AppPeliculaController,ParametrosController,UsuarioController],
     components: [UsuarioService],// componentes
 })
 export class AppModule implements NestModule{
